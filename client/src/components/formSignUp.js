@@ -4,6 +4,8 @@ import { Form, Button, Card, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import { CredentialsContext } from "../App";
+import { saveToLocal } from "../functions/localStorage"
+
 
 function FormSignUp() {
   const [email, setEmail] = useState();
@@ -23,7 +25,7 @@ function FormSignUp() {
           icon: "success",
           confirmButtonText: "Ok",
         });
-
+        saveToLocal("token", res.data)
         setCredentials({ name, email, password });
         history.push("/dashboard"); //organizar ruta para que lleve al inicio
       })
@@ -32,7 +34,7 @@ function FormSignUp() {
         const Swal = require("sweetalert2");
         Swal.fire({
           title: "Error!",
-          text: "El usuario ya existe",
+          text: "No se pudo realizar el registro",
           icon: "error",
           confirmButtonText: "Ok",
         });

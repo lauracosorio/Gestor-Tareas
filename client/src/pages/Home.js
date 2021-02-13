@@ -6,8 +6,9 @@ function Home() {
   const [credentials] = useContext(CredentialsContext);
   return (
     <>
-      <h1>Welcome {credentials.email}</h1>
+      {/* <h1>Welcome {credentials.email}</h1> */}
       <Todo />
+      
     </>
   );
 }

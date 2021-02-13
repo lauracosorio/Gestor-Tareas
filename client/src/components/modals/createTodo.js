@@ -2,11 +2,20 @@ import React, { useState } from "react";
 import { Form, Col, Row, Modal, Button } from "react-bootstrap";
 
 function CreateTodo() {
+  //Hooks modal
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [nameTodos, setNameTodos] = useState();
+  const [prioridadTodos, setPrioridadTodos] = useState();
+  const [estadoTodos, setEstadoTodos] = useState();
+  const [vencimientoTodos, setVencimientoTodos] = useState();
+
+  const addTodo = (e) => {
+    e.preventDefautl();
+
+  };
   return (
     <>
       <Button variant="info" className="p-1 mt-3" onClick={handleShow}>
@@ -18,18 +27,17 @@ function CreateTodo() {
           <Modal.Title>Crear Tarea</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form
+            onSubmit={(e) => {
+              addTodo(e);
+            }}
+          >
             <Form.Group
               as={Row}
               controlId="formPlaintextPassword"
               className="d-flex justify-content-center"
             >
-              {/* <Form.Label column sm="3">
-                    Inserte una imagen
-                  </Form.Label> */}
-              {/* <Col sm="12"> */}
               <Form.File id="imagen" label="Inserte una imagen" />
-              {/* </Col> */}
             </Form.Group>
             <Form.Group
               as={Row}
@@ -43,8 +51,11 @@ function CreateTodo() {
                 <Form.Control
                   type="text"
                   placeholder="Sacar al perro"
-                  //   value={conocimiento}
-                  //   onChange={(e) => setConocimiento(e.target.value)}
+                  onChange={(e) => {
+                    setNameTodos(e.target.value);
+                    console.log(nameTodos);
+                  }}
+                  name="name"
                 />
               </Col>
             </Form.Group>
@@ -57,10 +68,18 @@ function CreateTodo() {
                 Prioridad de la tarea
               </Form.Label>
               <Col sm="5">
-                <Form.Control as="select" defaultValue="Seleccionar...">
+                <Form.Control
+                  as="select"
+                  defaultValue="Seleccionar..."
+                  onChange={(e) => {
+                    setPrioridadTodos(e.target.value);
+                    console.log(prioridadTodos);
+                  }}
+                  name="prioridad"
+                >
                   <option>Seleccionar...</option>
-                  <option>Importante</option>
-                  <option>Urgente</option>
+                  <option value="important">Importante</option>
+                  <option value="urgent">Urgente</option>
                 </Form.Control>
               </Col>
             </Form.Group>
@@ -74,11 +93,19 @@ function CreateTodo() {
                 Estado de la tarea
               </Form.Label>
               <Col sm="5">
-                <Form.Control as="select" defaultValue="Seleccionar...">
+                <Form.Control
+                  as="select"
+                  defaultValue="Seleccionar..."
+                  onChange={(e) => {
+                    setEstadoTodos(e.target.value);
+                    console.log(nameTodos);
+                  }}
+                  name="estado"
+                >
                   <option>Seleccionar...</option>
-                  <option>Por realizar </option>
-                  <option>Realizando </option>
-                  <option>Realizada </option>
+                  <option value="todo">Por realizar </option>
+                  <option value="doing">Realizando </option>
+                  <option value="done">Realizada </option>
                 </Form.Control>
               </Col>
             </Form.Group>
@@ -95,8 +122,10 @@ function CreateTodo() {
                 <Form.Control
                   type="date"
                   placeholder="Autoevaluacion"
-                  //   value={autoevaluacion}
-                  //   onChange={(e) => setAutoevaluacion(e.target.value)}
+                  onChange={(e) => {
+                    setVencimientoTodos(e.target.value);
+                  }}
+                  name="vencimiento"
                 />
               </Col>
             </Form.Group>
@@ -106,7 +135,7 @@ function CreateTodo() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" type="submit" onClick={handleClose}>
             Save Changes
           </Button>
         </Modal.Footer>

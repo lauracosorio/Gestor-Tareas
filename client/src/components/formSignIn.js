@@ -4,6 +4,7 @@ import { Form, Button, Card, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import { CredentialsContext } from "../App";
+import { saveToLocal } from "../functions/localStorage"
 
 function FormSignIn(props) {
   const [email, setEmail] = useState();
@@ -24,6 +25,7 @@ function FormSignIn(props) {
         });
 
         setCredentials({ email, password});
+        saveToLocal("token", res.data)
         history.push("/dashboard"); //organizar ruta para que lleve al inicio
       })
       .catch((error) => {
