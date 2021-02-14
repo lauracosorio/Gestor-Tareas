@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Table } from "react-bootstrap";
 import EditarTodo from "./modals/editarTodo";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function TodoList() {
   const [data, setData] = useState([
