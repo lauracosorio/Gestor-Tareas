@@ -3,7 +3,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 require('./db/connection')
 const cookieParser = require('cookie-parser'); 
-const registro = require('./routes/signUp');
+const user = require('./routes/userRoutes');
+const todo = require('./routes/todoRoutes')
 
 //Initializations
 const app = express();
@@ -16,7 +17,8 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 //Rutas
-app.use('/', registro);
+app.use('/', user);
+app.use('/', todo);
 
 //Settings
 app.set('port', 5000);

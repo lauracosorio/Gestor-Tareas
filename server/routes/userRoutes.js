@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const registro = Router();
-const User = require("../models/SignUp");
+const user = Router();
+const User = require("../models/userSchemas");
 const dotenv = require("dotenv");
 dotenv.config();
 const bcrypt = require("bcryptjs");
@@ -28,7 +28,7 @@ let transport = nodemailer.createTransport(
   })
 );
 
-registro.post("/registro", async (req, res) => {
+user.post("/registro", async (req, res) => {
   //validation
   const { error } = registerValidation(req.body);
   if (error) {
@@ -66,7 +66,7 @@ registro.post("/registro", async (req, res) => {
   res.header('user-token', token).send(token)
 });
 
-registro.post("/login", async (req, res) => {
+user.post("/login", async (req, res) => {
   //validation
   const { error } = loginValidation(req.body);
   if (error) {
@@ -99,9 +99,5 @@ registro.post("/login", async (req, res) => {
   // res.send("Bienvenido");
 });
 
-registro.get("/dashboard", verify, async (req, res) => {
-  const users = await User.find().sort("-_id");
-  res.json(users);
-});
 
-module.exports = registro;
+module.exports = user;

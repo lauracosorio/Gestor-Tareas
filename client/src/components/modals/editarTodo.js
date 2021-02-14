@@ -1,44 +1,70 @@
 import React, { useState } from "react";
+import axios from "axios"
 import { Form, Col, Row, Modal, Button } from "react-bootstrap";
-import axios from "axios";
 
-function CreateTodo() {
+function EditarTodo(data) {
+  const [todo, setTodo] = useState(data.data);
+  const [nombre, setNombre] = useState(todo.nombre);
+  const [prioridad, setPrioridad] = useState(todo.prioridad);
+  const [estado, setEstado] = useState(todo.estado);
+  const [vencimiento, setVencimiento] = useState(todo.vencimiento);
+  const fecha = vencimiento.split("T", 5)
+
   //Hooks modal
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const [nombre, setNombre] = useState("");
-  const [prioridad, setPrioridad] = useState("");
-  const [estado, setEstado] = useState("");
-  const [vencimiento, setVencimiento] = useState("");
-
-  const addTodo = () => {
-    axios
-      .post(`http://localhost:5000/createTodo`, {
-        nombre,
-        prioridad,
-        estado,
-        vencimiento,
-      })
-      .then((res) => {
-        console.log(res);
-      });
-    // history.push("/dashboard");
-    window.location = "/dashboard";
+  const handleClose = () => {
+    setShow(false);
+    setNombre(todo.nombre);
+    setPrioridad(todo.prioridad);
+    setEstado(todo.estado);
+    setVencimiento(todo.vencimiento);
   };
 
-  // const history = useHistory();
+  const close = () => {
+    setShow(false);
+    setNombre(todo.nombre);
+    setPrioridad(todo.prioridad);
+    setEstado(todo.estado);
+    setVencimiento(todo.vencimiento);
+  };
+
+  const handleShow = () => setShow(true);
+
+  const editTodo = () => {
+      axios.put(`http://localhost:5000/editarTodo`,{
+          nombre,
+          prioridad,
+          estado,
+          vencimiento,
+         _id: todo._id 
+      }).then((res)=>{
+          console.log(res)
+      })
+      window.location = `/dashboard`
+  };
 
   return (
     <>
-      <Button variant="info" className="p-1 mt-3" onClick={handleShow}>
-        Añadir
-      </Button>
+      <button
+        type="button"
+        data-target={`#id${todo._id}`}
+        style={{
+          width: "80%",
+          backgroundColor: "white",
+          borderRadius: "5px",
+          borderColor: "#eeeeee",
+          height: "40px",
+        }}
+        onClick={handleShow}
+      >
+          {/* <img src="https://img.freepik.com/vector-gratis/concepto-fondo-pantalla-hojas-tropicales_23-2148537116.jpg?size=626&ext=jpg" alt="fondo" style={{width:40}}/> */}
+          {" "}
+        {todo.nombre}
+      </button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} id={`id${todo._id}`}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear Tarea</Modal.Title>
+          <Modal.Title>Editar Tarea</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -61,6 +87,7 @@ function CreateTodo() {
                 <Form.Control
                   type="text"
                   placeholder="Sacar al perro"
+                  value={nombre}
                   onChange={(e) => {
                     setNombre(e.target.value);
                   }}
@@ -84,6 +111,7 @@ function CreateTodo() {
                     setPrioridad(e.target.value);
                   }}
                   name="prioridad"
+                  value={prioridad}
                 >
                   <option>Seleccionar...</option>
                   <option value="Importante">Importante</option>
@@ -108,6 +136,7 @@ function CreateTodo() {
                     setEstado(e.target.value);
                   }}
                   name="estado"
+                  value={estado}
                 >
                   <option>Seleccionar...</option>
                   <option value="Por_Realizar">Por realizar </option>
@@ -132,6 +161,7 @@ function CreateTodo() {
                     setVencimiento(e.target.value);
                   }}
                   name="vencimiento"
+                  value={fecha[0]}
                 />
               </Col>
             </Form.Group>
@@ -144,11 +174,11 @@ function CreateTodo() {
           <Button
             variant="info"
             onClick={() => {
-              handleClose();
-              addTodo();
+              close();
+              editTodo();
             }}
           >
-            Crear Tarea
+            Editar Tarea
           </Button>
         </Modal.Footer>
       </Modal>
@@ -156,4 +186,4 @@ function CreateTodo() {
   );
 }
 
-export default CreateTodo;
+export default EditarTodo;
