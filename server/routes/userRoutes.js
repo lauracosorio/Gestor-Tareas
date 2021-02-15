@@ -93,8 +93,8 @@ user.post("/login", async (req, res) => {
   }
 
   //create token
-  const token = jwt.sign({email}, process.env.SECRET_TOKEN)
-  res.header('user-token', token).send(token)
+  const token = jwt.sign({_id:user._id}, process.env.SECRET_TOKEN)
+  res.header('user_token', token).send(token)
   // res.cookie('token', token)
   // res.send("Bienvenido");
 });
