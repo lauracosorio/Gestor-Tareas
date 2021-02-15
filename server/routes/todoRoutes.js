@@ -15,7 +15,7 @@ todo.post("/createTodo", verify, async (req, res) => {
   const [email, password] = token.split(":");
 
   //destructuring
-  const todosItems = req.body;
+  const { imagen, nombre, prioridad, estado, vencimiento } = req.body;
 
   //buscar usuario
   const user = await User.findOne({ email });
@@ -34,17 +34,20 @@ todo.post("/createTodo", verify, async (req, res) => {
     res.status(400).send("Contraseña Invalida");
   }
 
-  const todos = await Todos.findOne({ userId: user._id });
-  if (!todos) {
+  const todos = await Todos.find({ userId: user._id });
+  if (todos) {
     await Todos.create({
       userId: user._id,
-      todos: todosItems,
+      imagen,
+      nombre,
+      prioridad,
+      estado,
+      vencimiento,
     });
-   } 
-  else {
-    todos.todos = todosItems;
+  } else {
     await todos.save();
   }
+
   res.json("Tarea guardada con éxito");
 });
 
@@ -54,7 +57,7 @@ todo.get("/todos", verify, async (req, res) => {
   const [email, password] = token.split(":");
 
   const user = await User.findOne({ email });
-
+  console.log(user);
   if (!user) {
     res.status(403);
     res.json({
@@ -69,7 +72,7 @@ todo.get("/todos", verify, async (req, res) => {
     res.status(400).send("Contraseña Invalida");
   }
 
-  const { todos } = await Todos.findOne({ userId: user._id });
+  const todos = await Todos.find({ userId: user._id });
   res.json(todos);
 });
 

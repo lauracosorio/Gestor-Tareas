@@ -5,9 +5,7 @@ import EditarTodo from "./modals/editarTodo";
 import { getFromLocal } from "../functions/localStorage";
 
 function TodoList() {
-  const [data, setData] = useState([
-    { nombre: "", prioridad: "", estado: "", vencimiento: "" },
-  ]);
+  const [data, setData] = useState([]);
 
   const email = getFromLocal("email");
   const pass = getFromLocal("pass");
@@ -43,6 +41,7 @@ function TodoList() {
   return (
     <Container>
       <Container className="mt-5 ">
+        
         <Container as={Row} className="m-auto text-center">
           <Col sm={12} md={4}>
             <p>
