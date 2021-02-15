@@ -10,10 +10,10 @@ function EditarTodo(data) {
   const [estado, setEstado] = useState(todo.estado);
   const [vencimiento, setVencimiento] = useState(todo.vencimiento);
   const fecha = vencimiento.split("T", 5);
-console.log(todo._id)
+  console.log(todo._id);
   //headers
-  const email = getFromLocal('email')
-  const pass = getFromLocal('pass')
+  const email = getFromLocal("email");
+  const pass = getFromLocal("pass");
   const tokenKey = getFromLocal("token");
 
   //Hooks modal
@@ -49,8 +49,8 @@ console.log(todo._id)
         },
         {
           headers: {
-            "user_token": `${tokenKey}`,
-            autenticacion: `Basic ${email}:${pass}`
+            user_token: `${tokenKey}`,
+            autenticacion: `Basic ${email}:${pass}`,
           },
         }
       )
@@ -75,7 +75,10 @@ console.log(todo._id)
         onClick={handleShow}
       >
         {/* <img src="https://img.freepik.com/vector-gratis/concepto-fondo-pantalla-hojas-tropicales_23-2148537116.jpg?size=626&ext=jpg" alt="fondo" style={{width:40}}/> */}{" "}
-        {todo.nombre}
+        {todo.nombre} {fecha[0]}
+        {/* {Date(fecha) === Date()
+          ? alert(`La tarea: ' ${todo.nombre}' expira hoy`)
+          : null} */}
       </button>
 
       <Modal show={show} onHide={handleClose} id={`id${todo._id}`}>

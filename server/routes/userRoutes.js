@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const user = Router();
 const User = require("../models/userSchemas");
+const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 const bcrypt = require("bcryptjs");
@@ -12,21 +13,21 @@ const { registerValidation, loginValidation } = require("../validation");
 const nodemailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 
-let transport = nodemailer.createTransport(
-  smtpTransport({
-    service: "gmail",
-    host: "smt.gmail.email",
-    // port: 587,
-    // secure: false,
-    auth: {
-      user: process.env.USER,
-      pass: process.env.PASS,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  })
-);
+// let transport = nodemailer.createTransport(
+//   smtpTransport({
+//     service: "gmail",
+//     host: "smt.gmail.email",
+//     // port: 587,
+//     // secure: false,
+//     auth: {
+//       user: process.env.USER,
+//       pass: process.env.PASS,
+//     },
+//     tls: {
+//       rejectUnauthorized: false,
+//     },
+//   })
+// );
 
 user.post("/registro", async (req, res) => {
   //validation
@@ -64,7 +65,8 @@ user.post("/registro", async (req, res) => {
   const token = jwt.sign({ email }, process.env.SECRET_TOKEN);
   res.header("user-token", token).send(token);
 
-  // contentHTML = `<!DOCTYPE html>
+  // try {
+  //   contentHTML = `<!DOCTYPE html>
   //   <html lang="en">
   //     <head>
   //       <meta charset="UTF-8" />
@@ -475,22 +477,25 @@ user.post("/registro", async (req, res) => {
     
   //   `;
 
-  // const mailOptions = {
-  //   from: '"To do list 📝" <lauris9704@gmail.com>',
-  //   full_name: name,
-  //   to: email,
-  //   subject: "Registro exitoso",
-  //   html: contentHTML,
-  // };
+  //   const mailOptions = {
+  //     from: '"To do list 📝" <lauris9704@gmail.com>',
+  //     full_name: name,
+  //     to: email,
+  //     subject: "Registro exitoso",
+  //     html: contentHTML,
+  //   };
 
-  // transport.sendMail(mailOptions, function (err, info) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log(`sent: ${info.response}`);
-  //     res.json({ message: "Correo enviado satisfactoriamente" });
-  //   }
-  // });
+  //   await transport.sendMail(mailOptions, function (err, info) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       console.log(`sent: ${info.response}`);
+  //       res.json({ message: "Correo enviado satisfactoriamente" });
+  //     }
+  //   });
+  // } catch (e) {
+  //   console.log(e);
+  // }
 });
 
 user.post("/login", async (req, res) => {

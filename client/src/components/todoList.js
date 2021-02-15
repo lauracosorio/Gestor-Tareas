@@ -41,7 +41,6 @@ function TodoList() {
   return (
     <Container>
       <Container className="mt-5 ">
-        
         <Container as={Row} className="m-auto text-center">
           <Col sm={12} md={4}>
             <p>
@@ -62,6 +61,9 @@ function TodoList() {
                           style={{ color: "red", border: "none", padding: 3 }}
                         >
                           {" "}
+                          {todo.vencimiento === Date.now
+                            ? alert("La tarea se vence hoy")
+                            : null}
                           <EditarTodo data={todo} />
                           <button
                             style={{
@@ -87,6 +89,7 @@ function TodoList() {
                 <th style={{ border: "none" }}>Urgente</th>
               </tr>
               {data.map((todo) => {
+               
                 return (
                   <>
                     {todo.estado === "Por_Realizar" &&

@@ -14,23 +14,28 @@ function CreateTodo() {
   const [prioridad, setPrioridad] = useState("");
   const [estado, setEstado] = useState("");
   const [vencimiento, setVencimiento] = useState("");
-  
-  const email = getFromLocal('email')
-  const pass = getFromLocal('pass')
+
+  const email = getFromLocal("email");
+  const pass = getFromLocal("pass");
   const tokenKey = getFromLocal("token");
 
+  const urlBack = 'http://localhost:5000'
+
   const addTodo = () => {
- 
     axios
       .post(
-        `http://localhost:5000/createTodo`,
+        `${urlBack}/createTodo`,
         {
-         imagen, nombre, prioridad, estado, vencimiento 
+          imagen,
+          nombre,
+          prioridad,
+          estado,
+          vencimiento,
         },
         {
           headers: {
             user_token: `${tokenKey}`,
-            autenticacion: `Basic ${email}:${pass}`
+            autenticacion: `Basic ${email}:${pass}`,
           },
         }
       )
@@ -39,6 +44,23 @@ function CreateTodo() {
       });
     window.location = "/dashboard";
   };
+
+
+  const fileSend = async (file) => {
+
+   
+    let formData = new FormData();
+    formData.append("file", file);
+    let res = ''
+    try {
+      console.log(`${urlBack}/imageupload/`)
+      res = await axios.post(`${urlBack}/imageupload/`, formData);
+
+    } catch (error) {
+      console.log('Error updating file.');
+    }
+    return res.data
+  }
 
   return (
     <>
@@ -54,7 +76,7 @@ function CreateTodo() {
           <Form>
             <Form.Group
               as={Row}
-              controlId="formPlaintextPassword"
+              controlId="imagen"
               className="d-flex justify-content-center"
             >
               <Form.File
@@ -63,6 +85,8 @@ function CreateTodo() {
                 onChange={(e) => {
                   setImagen(e.target.value);
                 }}
+                type="file"
+                name="todoImage"
               />
             </Form.Group>
             <Form.Group
