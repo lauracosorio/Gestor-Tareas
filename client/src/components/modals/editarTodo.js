@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 import { Form, Col, Row, Modal, Button } from "react-bootstrap";
+import { getFromLocal } from "../../functions/localStorage";
 
 function EditarTodo(data) {
   const [todo, setTodo] = useState(data.data);
@@ -8,7 +9,12 @@ function EditarTodo(data) {
   const [prioridad, setPrioridad] = useState(todo.prioridad);
   const [estado, setEstado] = useState(todo.estado);
   const [vencimiento, setVencimiento] = useState(todo.vencimiento);
-  const fecha = vencimiento.split("T", 5)
+  const fecha = vencimiento.split("T", 5);
+console.log(todo._id)
+  //headers
+  const email = getFromLocal('email')
+  const pass = getFromLocal('pass')
+  const tokenKey = getFromLocal("token");
 
   //Hooks modal
   const [show, setShow] = useState(false);
@@ -31,16 +37,27 @@ function EditarTodo(data) {
   const handleShow = () => setShow(true);
 
   const editTodo = () => {
-      axios.put(`http://localhost:5000/editarTodo`,{
+    axios
+      .put(
+        `http://localhost:5000/editarTodo`,
+        {
           nombre,
           prioridad,
           estado,
           vencimiento,
-         _id: todo._id 
-      }).then((res)=>{
-          console.log(res)
-      })
-      window.location = `/dashboard`
+          _id: todo._id,
+        },
+        {
+          headers: {
+            "user_token": `${tokenKey}`,
+            autenticacion: `Basic ${email}:${pass}`
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      });
+    window.location = `/dashboard`;
   };
 
   return (
@@ -57,8 +74,7 @@ function EditarTodo(data) {
         }}
         onClick={handleShow}
       >
-          {/* <img src="https://img.freepik.com/vector-gratis/concepto-fondo-pantalla-hojas-tropicales_23-2148537116.jpg?size=626&ext=jpg" alt="fondo" style={{width:40}}/> */}
-          {" "}
+        {/* <img src="https://img.freepik.com/vector-gratis/concepto-fondo-pantalla-hojas-tropicales_23-2148537116.jpg?size=626&ext=jpg" alt="fondo" style={{width:40}}/> */}{" "}
         {todo.nombre}
       </button>
 

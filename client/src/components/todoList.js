@@ -2,22 +2,41 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Table } from "react-bootstrap";
 import EditarTodo from "./modals/editarTodo";
+import { getFromLocal } from "../functions/localStorage";
 
 function TodoList() {
   const [data, setData] = useState([
     { nombre: "", prioridad: "", estado: "", vencimiento: "" },
   ]);
 
+  const email = getFromLocal("email");
+  const pass = getFromLocal("pass");
+  const tokenKey = getFromLocal("token");
+
   useEffect(() => {
-    axios.get(`http://localhost:5000/todos/`).then((res) => {
-      setData(res.data);
-    });
+    axios
+      .get(`http://localhost:5000/todos/`, {
+        headers: {
+          user_token: `${tokenKey}`,
+          autenticacion: `Basic ${email}:${pass}`,
+        },
+      })
+      .then((res) => {
+        setData(res.data);
+        console.log(res);
+      });
   }, []);
 
   const deleteTodo = (_id) => {
-    axios.delete(`http://localhost:5000/deleteTodo/${_id}`).then((res) => {
-      console.log(res);
-    });
+    axios
+      .delete(`http://localhost:5000/deleteTodo/${_id}`, {
+        headers: {
+          user_token: `${tokenKey}`,
+        },
+      })
+      .then((res) => {
+        res.json();
+      });
     window.location = `/dashboard`;
   };
 
@@ -55,6 +74,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>
@@ -87,6 +107,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>
@@ -127,6 +148,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>
@@ -159,6 +181,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>
@@ -199,6 +222,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>
@@ -232,6 +256,7 @@ function TodoList() {
                             onClick={() => {
                               deleteTodo(todo._id);
                             }}
+                            title="Eliminar Tarea"
                           >
                             ⛔
                           </button>

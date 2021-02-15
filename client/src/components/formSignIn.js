@@ -1,21 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button, Card, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
-import { CredentialsContext } from "../App";
-import { saveToLocal } from "../functions/localStorage"
+import { saveToLocal } from "../functions/localStorage";
 
-function FormSignIn(props) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [credentials, setCredentials] = useContext(CredentialsContext);
+function FormSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const Login = (e) => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:5000/login`, { email, password })
+      .post(
+        `http://localhost:5000/login`,
+        {
+          email,
+          password,
+        },
+        { "Content-Type": "application/json" }
+      )
       .then((res) => {
         console.log(res);
         Swal.fire({
@@ -24,8 +29,10 @@ function FormSignIn(props) {
           confirmButtonText: "Ok",
         });
 
-        setCredentials({ email, password});
-        saveToLocal("token", res.data)
+        // setCredentials({ email, password });
+        saveToLocal("email",email);
+        saveToLocal("pass", password)
+        saveToLocal("token", res.data);
         history.push("/dashboard"); //organizar ruta para que lleve al inicio
       })
       .catch((error) => {

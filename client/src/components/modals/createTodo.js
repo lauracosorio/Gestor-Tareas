@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Col, Row, Modal, Button } from "react-bootstrap";
 import axios from "axios";
+import { getFromLocal } from "../../functions/localStorage";
 
 function CreateTodo() {
   //Hooks modal
@@ -8,27 +9,36 @@ function CreateTodo() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [imagen, setImagen] = useState("");
   const [nombre, setNombre] = useState("");
   const [prioridad, setPrioridad] = useState("");
   const [estado, setEstado] = useState("");
   const [vencimiento, setVencimiento] = useState("");
+  
+  const email = getFromLocal('email')
+  const pass = getFromLocal('pass')
+  const tokenKey = getFromLocal("token");
 
   const addTodo = () => {
+ 
     axios
-      .post(`http://localhost:5000/createTodo`, {
-        nombre,
-        prioridad,
-        estado,
-        vencimiento,
-      })
+      .post(
+        `http://localhost:5000/createTodo`,
+        {
+         imagen, nombre, prioridad, estado, vencimiento 
+        },
+        {
+          headers: {
+            user_token: `${tokenKey}`,
+            autenticacion: `Basic ${email}:${pass}`
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
       });
-    // history.push("/dashboard");
     window.location = "/dashboard";
   };
-
-  // const history = useHistory();
 
   return (
     <>
@@ -47,7 +57,13 @@ function CreateTodo() {
               controlId="formPlaintextPassword"
               className="d-flex justify-content-center"
             >
-              <Form.File id="imagen" label="Inserte una imagen" />
+              <Form.File
+                id="imagen"
+                label="Inserte una imagen"
+                onChange={(e) => {
+                  setImagen(e.target.value);
+                }}
+              />
             </Form.Group>
             <Form.Group
               as={Row}

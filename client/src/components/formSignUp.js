@@ -1,9 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button, Card, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
-import { CredentialsContext } from "../App";
 import { saveToLocal } from "../functions/localStorage"
 
 
@@ -11,7 +10,6 @@ function FormSignUp() {
   const [email, setEmail] = useState();
   const [name, setName] = useState();
   const [password, setPassword] = useState();
-  const [credentials, setCredentials] = useContext(CredentialsContext);
 
   const Registro = (e) => {
     e.preventDefault();
@@ -25,8 +23,10 @@ function FormSignUp() {
           icon: "success",
           confirmButtonText: "Ok",
         });
-        saveToLocal("token", res.data)
-        setCredentials({ name, email, password });
+        saveToLocal("token", res.data);
+        saveToLocal("email", email)
+        saveToLocal("name", name);
+        saveToLocal('pass', password)
         history.push("/dashboard"); //organizar ruta para que lleve al inicio
       })
       .catch((error) => {

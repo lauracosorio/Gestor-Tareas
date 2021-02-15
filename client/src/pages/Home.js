@@ -1,14 +1,12 @@
-import React, { useContext } from "react";
-import { CredentialsContext } from "../App";
+import React from "react";
+import Header from "../components/Header";
 import Todo from "../components/toDo";
 
 function Home() {
-  const [credentials] = useContext(CredentialsContext);
   return (
     <>
-      {/* <h1>Welcome {credentials.email}</h1> */}
+      <Header />
       <Todo />
-      
     </>
   );
 }

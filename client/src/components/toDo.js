@@ -5,7 +5,7 @@ import TodoList from "./todoList";
 
 function Todo() {
   return (
-    <Container className="mt-5">
+    <Container className="mt-3">
       <h1>✔ Lista de Tareas</h1>
       <p className="m-0 p-0">
         Haga click en el botón<strong> Añadir</strong> para crear tareas nuevas{" "}
