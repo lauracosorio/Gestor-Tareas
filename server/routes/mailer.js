@@ -3,10 +3,6 @@ const user = Router();
 const User = require("../models/userSchemas");
 const dotenv = require("dotenv");
 dotenv.config();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const verify = require("./vToken");
-const { registerValidation, loginValidation } = require("../validation");
 
 //nodemailer
 const nodemailer = require("nodemailer");
@@ -28,41 +24,9 @@ let transport = nodemailer.createTransport(
   })
 );
 
-user.post("/registro", async (req, res) => {
-  //validation
-  const { error } = registerValidation(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-
+user.post("/registro", (req, res) => {
   //destructuring
   let { name, email, password } = req.body;
-
-  //checking de user already exist
-  const user = await User.findOne({ email });
-  if (user) {
-    res.status(400);
-    res.json({
-      message: "El usuario ya existe",
-    });
-
-    return;
-  }
-
-  //encrypt password
-  const salt = await bcrypt.genSalt(10);
-  const hashPassword = await bcrypt.hash(req.body.password, salt);
-
-  //new usser
-  const newUser = new User({ name, email, password: hashPassword });
-
-  await newUser.save();
-  // res.json({
-  //   message: "Usuario registrado con éxito!",
-  // });
-  //create token
-  const token = jwt.sign({ email }, process.env.SECRET_TOKEN);
-  res.header("user-token", token).send(token);
 
   contentHTML = `<!DOCTYPE html>
     <html lang="en">
@@ -475,55 +439,32 @@ user.post("/registro", async (req, res) => {
     
     `;
 
-  const mailOptions = {
-    from: '"To do list 📝" <lauris9704@gmail.com>',
-    full_name: name,
-    to: email,
-    subject: "Registro exitoso",
-    html: contentHTML,
-  };
-
-  transport.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(`sent: ${info.response}`);
-      res.json({ message: "Correo enviado satisfactoriamente" });
-    }
-  });
-});
-
-user.post("/login", async (req, res) => {
-  //validation
-  const { error } = loginValidation(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
-
-  //destructuring
-  const { email, password } = req.body;
-
-  //checking de user already exist
-  const user = await User.findOne({ email });
-  if (!user) {
-    res.status(500);
-    res.json({
-      message: "Datos invalidos",
+  async function wrapedSendMail(mailOptions) {
+    return new Promise((resolve, reject) => {
+      let transporter = nodemailer.createTransport({});
+      transport.sendMail(mailOptions, function (err, info) {
+        if (err) {
+          console.log(err);
+          resolve(false);
+        } else {
+          console.log(`sent: ${info.response}`);
+          res.json({ message: "Correo enviado satisfactoriamente" });
+          resolve(true);
+        }
+      });
     });
-    return;
   }
 
-  //password
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) {
-    res.status(400).send("Contraseña Invalida");
-  }
-
-  //create token
-  const token = jwt.sign({ _id: user._id }, process.env.SECRET_TOKEN);
-  res.header("user_token", token).send(token);
-  // res.cookie('token', token)
-  // res.send("Bienvenido");
+  sendmail = async (req) => {
+    const mailOptions = {
+      from: '"To do list 📝" <lauris9704@gmail.com>',
+      full_name: name,
+      to: email,
+      subject: "Registro exitoso",
+      html: contentHTML,
+    };
+    let resp = await wrapedSendMail(mailOptions);
+    // log or process resp;
+    return resp;
+  };
 });
-
-module.exports = user;

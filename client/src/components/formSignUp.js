@@ -20,6 +20,7 @@ function FormSignUp() {
         console.log(res);
         Swal.fire({
           title: "Bievenido!",
+          text: "Por favor inicie sesión para poder autenticar los datos",
           icon: "success",
           confirmButtonText: "Ok",
         });
@@ -27,7 +28,7 @@ function FormSignUp() {
         saveToLocal("email", email)
         saveToLocal("name", name);
         saveToLocal('pass', password)
-        history.push("/dashboard"); //organizar ruta para que lleve al inicio
+        history.push("/"); //organizar ruta para que lleve al inicio
       })
       .catch((error) => {
         console.log(error);
