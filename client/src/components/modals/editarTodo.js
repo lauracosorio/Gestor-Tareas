@@ -10,7 +10,10 @@ function EditarTodo(data) {
   const [estado, setEstado] = useState(todo.estado);
   const [vencimiento, setVencimiento] = useState(todo.vencimiento);
   const fecha = vencimiento.split("T", 5);
-  console.log(todo._id);
+
+  const urlBack = 'http://localhost:5000'
+
+
   //headers
   const email = getFromLocal("email");
   const pass = getFromLocal("pass");
@@ -39,7 +42,7 @@ function EditarTodo(data) {
   const editTodo = () => {
     axios
       .put(
-        `http://localhost:5000/editarTodo`,
+        `${urlBack}/editarTodo`,
         {
           nombre,
           prioridad,

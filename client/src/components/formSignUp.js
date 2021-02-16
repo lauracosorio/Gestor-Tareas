@@ -11,11 +11,13 @@ function FormSignUp() {
   const [name, setName] = useState();
   const [password, setPassword] = useState();
 
+  const urlBack = 'http://localhost:5000'
+
   const Registro = (e) => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:5000/registro`, { name, email, password })
+      .post(`${urlBack}/registro`, { name, email, password })
       .then((res) => {
         console.log(res);
         Swal.fire({

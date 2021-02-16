@@ -6,8 +6,6 @@ import SignUp from "./pages/SignUp";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/Home";
 
-export const CredentialsContext = React.createContext();
-
 function App() {
   return (
     <BrowserRouter>

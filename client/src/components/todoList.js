@@ -11,9 +11,11 @@ function TodoList() {
   const pass = getFromLocal("pass");
   const tokenKey = getFromLocal("token");
 
+  const urlBack = 'http://localhost:5000'
+
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/todos/`, {
+      .get(`${urlBack}/todos/`, {
         headers: {
           user_token: `${tokenKey}`,
           autenticacion: `Basic ${email}:${pass}`,
@@ -27,7 +29,7 @@ function TodoList() {
 
   const deleteTodo = (_id) => {
     axios
-      .delete(`http://localhost:5000/deleteTodo/${_id}`, {
+      .delete(`${urlBack}/deleteTodo/${_id}`, {
         headers: {
           user_token: `${tokenKey}`,
         },
