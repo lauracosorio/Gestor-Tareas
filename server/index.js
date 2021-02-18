@@ -21,7 +21,7 @@ const multerMid = multer({
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors());
+app.use(cors("*"));
 app.use(morgan('dev'));
 app.use(multerMid.single('file'))
 app.use(bodyParser.json());
@@ -34,6 +34,10 @@ app.use('/', imagen)
 
 //Settings
 app.set('port', 5000);
+
+app.get('/', (req, res) => {
+    res.send("holaa ! ")
+})
 
 //Levantamiento del servidor 
 app.listen(app.get('port'), ()=>{
