@@ -19,14 +19,42 @@ function CreateTodo() {
   const pass = getFromLocal("pass");
   const tokenKey = getFromLocal("token");
 
-  const urlBack = 'http://localhost:5000'
+  const urlBack = 'http://localhost:5001'
 
-  const addTodo = () => {
+  const handleImage = async (e) => {
+    const {files} = e.target;
+    const file=files[0];
+    let formData = new FormData();
+    formData.append("file", file);
+    setImagen(formData);
+  }
+
+  const sendImg = async() => {
+    try {
+      if(imagen!==''){
+        const { data } = await axios.post(`${urlBack}/imagen`,imagen,{
+          headers: {
+            user_token: `${tokenKey}`,
+            autenticacion: `Basic ${email}:${pass}`,
+          },
+        });
+      return data;
+      }
+      return '';
+    }catch (error) {
+    console.log(error.message)
+    }
+  };
+
+
+
+  const addTodo = async () => {
+    const url = await sendImg()
     axios
       .post(
         `${urlBack}/createTodo`,
         {
-          imagen,
+          imagen: url,
           nombre,
           prioridad,
           estado,
@@ -45,22 +73,6 @@ function CreateTodo() {
     window.location = "/dashboard";
   };
 
-
-  const fileSend = async (file) => {
-
-   
-    let formData = new FormData();
-    formData.append("file", file);
-    let res = ''
-    try {
-      console.log(`${urlBack}/imageupload/`)
-      res = await axios.post(`${urlBack}/imageupload/`, formData);
-
-    } catch (error) {
-      console.log('Error updating file.');
-    }
-    return res.data
-  }
 
   return (
     <>
@@ -82,9 +94,7 @@ function CreateTodo() {
               <Form.File
                 id="imagen"
                 label="Inserte una imagen"
-                onChange={(e) => {
-                  setImagen(e.target.value);
-                }}
+                onChange={handleImage}
                 type="file"
                 name="todoImage"
               />

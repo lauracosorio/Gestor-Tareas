@@ -14,6 +14,7 @@ todo.post("/createTodo", verify, async (req, res) => {
   const [, token] = autenticacion.split(" ");
   const [email, password] = token.split(":");
 
+  // console.log(req.body)
   //destructuring
   const { imagen, nombre, prioridad, estado, vencimiento } = req.body;
 

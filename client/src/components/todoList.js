@@ -13,6 +13,7 @@ function TodoList() {
 
   const urlBack = 'http://localhost:5000'
 
+
   useEffect(() => {
     axios
       .get(`${urlBack}/todos/`, {
@@ -25,7 +26,8 @@ function TodoList() {
         setData(res.data);
         console.log(res);
       });
-  }, []);
+
+  }, [urlBack, tokenKey, email, pass]);
 
   const deleteTodo = (_id) => {
     axios
@@ -54,6 +56,8 @@ function TodoList() {
                 <th style={{ border: "none" }}>Importante</th>
               </tr>
               {data.map((todo) => {
+                console.log(Date(todo.vencimiento))
+                console.log(Date())
                 return (
                   <>
                     {todo.estado === "Por_Realizar" &&
@@ -63,9 +67,9 @@ function TodoList() {
                           style={{ color: "red", border: "none", padding: 3 }}
                         >
                           {" "}
-                          {todo.vencimiento === Date.now
-                            ? alert("La tarea se vence hoy")
-                            : null}
+                          {/* {Date(todo.vencimiento) === Date()
+                            ? alert(`La tarea "${todo.nombre}" está proxima a vencer`)
+                            : null} */}
                           <EditarTodo data={todo} />
                           <button
                             style={{

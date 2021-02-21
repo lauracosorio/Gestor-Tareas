@@ -33,7 +33,7 @@ app.use('/', todo);
 app.use('/', imagen)
 
 //Settings
-app.set('port', 5000);
+app.set('port', 5001);
 
 app.get('/', (req, res) => {
     res.send("holaa ! ")
@@ -43,3 +43,6 @@ app.get('/', (req, res) => {
 app.listen(app.get('port'), ()=>{
     console.log(`Servidor corriendo en el puerto ${app.get('port')}`)
 })
+
+
+module.exports = app;

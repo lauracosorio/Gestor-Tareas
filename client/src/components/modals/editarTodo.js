@@ -73,11 +73,11 @@ function EditarTodo(data) {
           backgroundColor: "white",
           borderRadius: "5px",
           borderColor: "#eeeeee",
-          height: "40px",
+          height: "80px",
         }}
         onClick={handleShow}
       >
-        {/* <img src="https://img.freepik.com/vector-gratis/concepto-fondo-pantalla-hojas-tropicales_23-2148537116.jpg?size=626&ext=jpg" alt="fondo" style={{width:40}}/> */}{" "}
+        <img src={todo.imagen} alt={todo.nombre} style={{width:50, display:'block', margin: 'auto'}}/>{" "}
         {todo.nombre} {fecha[0]}
         {/* {Date(fecha) === Date()
           ? alert(`La tarea: ' ${todo.nombre}' expira hoy`)
