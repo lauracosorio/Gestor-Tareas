@@ -78,7 +78,7 @@ todo.get("/todos", verify, async (req, res) => {
 });
 
 todo.put("/editarTodo/", verify, async (req, res) => {
-  const { nombre, prioridad, estado, vencimiento, _id } = req.body;
+  const { imagen, nombre, prioridad, estado, vencimiento, _id } = req.body;
 
   Todos.findByIdAndUpdate(_id, { $set: req.body }, (err, resultado) => {
     if (err) {

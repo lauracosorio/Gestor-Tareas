@@ -5,6 +5,7 @@ import { getFromLocal } from "../../functions/localStorage";
 
 function EditarTodo(data) {
   const [todo, setTodo] = useState(data.data);
+  const [imagen, setImagen] = useState(data.imagen);
   const [nombre, setNombre] = useState(todo.nombre);
   const [prioridad, setPrioridad] = useState(todo.prioridad);
   const [estado, setEstado] = useState(todo.estado);
@@ -12,7 +13,6 @@ function EditarTodo(data) {
   const fecha = vencimiento.split("T", 5);
 
   const urlBack = 'http://localhost:5000'
-
 
   //headers
   const email = getFromLocal("email");
@@ -23,6 +23,7 @@ function EditarTodo(data) {
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
+    setImagen(todo.imagen);
     setNombre(todo.nombre);
     setPrioridad(todo.prioridad);
     setEstado(todo.estado);
@@ -31,6 +32,7 @@ function EditarTodo(data) {
 
   const close = () => {
     setShow(false);
+    setImagen(todo.imagen);
     setNombre(todo.nombre);
     setPrioridad(todo.prioridad);
     setEstado(todo.estado);
@@ -39,11 +41,13 @@ function EditarTodo(data) {
 
   const handleShow = () => setShow(true);
 
-  const editTodo = () => {
+  const editTodo = async () => {
+    const url = await sendImg();
     axios
       .put(
         `${urlBack}/editarTodo`,
         {
+          imagen: url,
           nombre,
           prioridad,
           estado,
@@ -63,6 +67,31 @@ function EditarTodo(data) {
     window.location = `/dashboard`;
   };
 
+  const handleImage = async (e) => {
+    const {files} = e.target;
+    const file=files[0];
+    let formData = new FormData();
+    formData.append("file", file);
+    setImagen(formData);
+  }
+
+  const sendImg = async() => {
+    try {
+      if(imagen!==''){
+        const { data } = await axios.post(`${urlBack}/imagen`,imagen,{
+          headers: {
+            user_token: `${tokenKey}`,
+            autenticacion: `Basic ${email}:${pass}`,
+          },
+        });
+      return data;
+      }
+      return '';
+    }catch (error) {
+    console.log(error.message)
+    }
+  };
+
   return (
     <>
       <button
@@ -79,9 +108,6 @@ function EditarTodo(data) {
       >
         <img src={todo.imagen} alt={todo.nombre} style={{width:50, display:'block', margin: 'auto'}}/>{" "}
         {todo.nombre} {fecha[0]}
-        {/* {Date(fecha) === Date()
-          ? alert(`La tarea: ' ${todo.nombre}' expira hoy`)
-          : null} */}
       </button>
 
       <Modal show={show} onHide={handleClose} id={`id${todo._id}`}>
@@ -92,10 +118,16 @@ function EditarTodo(data) {
           <Form>
             <Form.Group
               as={Row}
-              controlId="formPlaintextPassword"
+              controlId="Imagen"
               className="d-flex justify-content-center"
             >
-              <Form.File id="imagen" label="Inserte una imagen" />
+              <Form.File
+                id="imagen"
+                label="Inserte una imagen"
+                onChange={handleImage}
+                type="file"
+                name="todoImage"
+              />
             </Form.Group>
             <Form.Group
               as={Row}
